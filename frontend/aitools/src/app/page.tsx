@@ -1,7 +1,11 @@
+'use client';
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import AbstractNetwork from "./components/svglogo";
 
 export default function Home() {
+
+  const router = useRouter();
     return (
       <>
         <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -70,7 +74,11 @@ export default function Home() {
               </button  >
 
               <div>
-                <button className=" rounded-md bg-indigo-400 text-white px-3 py-1.5 text-sm/6 font-semibold  shadow-sm hover:bg-indigo-500  hover:text-white focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-indigo-600 "> Sign Up</button>
+                <button 
+                className=" rounded-md bg-indigo-400 text-white px-3 py-1.5 text-sm/6 font-semibold  shadow-sm hover:bg-indigo-500  hover:text-white focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-indigo-600 "
+                onClick={() => router.push("/signup")}> 
+                Sign Up
+                </button>
               </div>
             </div>
 

@@ -7,6 +7,7 @@ import { ToastContainer, toast } from "react-toastify";
 import AbstractNetwork from "../components/svglogo";
 
 interface SignupFormData {
+    name: string;
     email: string;
     password: string;
 }
@@ -14,6 +15,7 @@ interface SignupFormData {
 export default function Signup() {
 
     const [formData, setformData] = useState<SignupFormData>({
+        name: "",
         email: "",
         password: ""
     });
@@ -23,19 +25,35 @@ export default function Signup() {
         setformData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handleSignup = async () => {
+    const handleSignup = async (e: React.FormEvent) => {
+        e.preventDefault();
         try {
             const response = await toast.promise(
-                axios.post("http://localhost:8000/api/signup", formData, { withCredentials: true }),
+                axios.post("http://localhost:8000/api/signup", formData, {
+                    withCredentials: true,
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                }),
+
                 {
                     pending: "Signing up...",
                     success: "Signup successful",
-                    error: "Signup failed, Please try again"
+
                 }
             );
+            console.log("hey1");
 
-        } catch (error) {
-            router.push("/");
+        } catch (error:any) {
+            if (error.response && error.response.data.message === 'User with this email already exists.') {
+                toast.error("User already exists.");
+                router.push("/");
+            } else {
+                toast.error("Signup failed, Please try agannin");
+            }
+            console.log("hey2");
+            console.log(error);
+
         }
 
     }
@@ -46,12 +64,28 @@ export default function Signup() {
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                     <AbstractNetwork />
                     <h2 className=" text-center text-2xl/9 font-bold tracking-tight text-gray-900">
-                        Sign in to your account
+                        Sign up for your account
                     </h2>
                 </div>
 
                 <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-                    <form action="#" method="POST" className="space-y-6">
+                    <form action="POST" onSubmit={handleSignup} className="space-y-6">
+                        <div>
+                            <label htmlFor="email" className="block text-sm/6 font-medium text-gray-900">
+                                Name
+                            </label>
+                            <div className="mt-2">
+                                <input
+                                    id="name"
+                                    name="name"
+                                    type="text"
+                                    required
+                                    autoComplete=""
+                                    onChange={handleChange}
+                                    className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline  -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline  focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                                />
+                            </div>
+                        </div>
                         <div>
                             <label htmlFor="email" className="block text-sm/6 font-medium text-gray-900">
                                 Email address
@@ -63,6 +97,7 @@ export default function Signup() {
                                     type="email"
                                     required
                                     autoComplete="email"
+                                    onChange={handleChange}
                                     className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline  -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline  focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                                 />
                             </div>
@@ -79,6 +114,7 @@ export default function Signup() {
                                     id="password"
                                     name="password"
                                     type="password"
+                                    onChange={handleChange}
                                     required
                                     autoComplete="current-password"
                                     className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900  outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
@@ -89,6 +125,7 @@ export default function Signup() {
                         <div>
                             <button
                                 type="submit"
+                                value="submit"
                                 className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                             >
                                 Sign Up
