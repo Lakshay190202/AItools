@@ -42,8 +42,7 @@ export default function Signup() {
 
                 }
             );
-            console.log("hey1");
-
+            router.push("/");
         } catch (error:any) {
             if (error.response && error.response.data.message === 'User with this email already exists.') {
                 toast.error("User already exists.");
@@ -51,8 +50,6 @@ export default function Signup() {
             } else {
                 toast.error("Signup failed, Please try agannin");
             }
-            console.log("hey2");
-            console.log(error);
 
         }
 
