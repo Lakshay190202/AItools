@@ -72,3 +72,5 @@ class EmailVerificationView(APIView):
                 'status': 'Bad Request',
                 'message': 'Invalid token, Try again later'
             }, status=status.HTTP_400_BAD_REQUEST)
+        
+#class LoginView():
